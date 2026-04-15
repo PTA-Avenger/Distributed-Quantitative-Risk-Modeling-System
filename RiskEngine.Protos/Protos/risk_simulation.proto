@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option csharp_namespace = "RiskEngine.Protos";
+
+package riskengine;
+
+// The simulation service definition.
+service RiskSimulationService {
+  // Executes a batch of Monte Carlo simulation paths and returns the portfolio P&L array
+  rpc ExecuteSimulation (SimulationRequest) returns (SimulationResponse);
+}
+
+// The request message containing all parameters needed to simulate paths for the portfolio.
+message SimulationRequest {
+  int32 number_of_paths = 1;
+  double time_horizon_years = 2;
+  int32 time_steps = 3;
+  int32 portfolio_size = 4;
+  
+  // Flattened array of Cholesky decomposition of the correlation matrix (size: portfolio_size * portfolio_size)
+  repeated double cholesky_matrix = 5;
+  
+  // Array of drifts (expected returns) for each asset (size: portfolio_size)
+  repeated double drifts = 6;
+  
+  // Array of volatilities for each asset (size: portfolio_size)
+  repeated double volatilities = 7;
+  
+  // Array of initial prices for each asset (size: portfolio_size)
+  repeated double initial_prices = 8;
+  
+  // Array of weights for each asset in the portfolio (size: portfolio_size)
+  // Used to calculate final portfolio value
+  repeated double weights = 9;
+  
+  // Total initial value of the portfolio
+  double initial_portfolio_value = 10;
+}
+
+// The response message containing the P&L from each simulated path.
+message SimulationResponse {
+  // An array of P&L values, one for each path simulated.
+  repeated double profit_and_loss = 1;
+}

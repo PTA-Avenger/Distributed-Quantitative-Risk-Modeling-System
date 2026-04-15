@@ -1,0 +1,11 @@
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Models\bin\Debug\net10.0\RiskEngine.Models.deps.json
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Models\bin\Debug\net10.0\RiskEngine.Models.dll
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Models\bin\Debug\net10.0\RiskEngine.Models.pdb
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Models\obj\Debug\net10.0\RiskEngine.Models.GeneratedMSBuildEditorConfig.editorconfig
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Models\obj\Debug\net10.0\RiskEngine.Models.AssemblyInfoInputs.cache
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Models\obj\Debug\net10.0\RiskEngine.Models.AssemblyInfo.cs
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Models\obj\Debug\net10.0\RiskEngine.Models.csproj.CoreCompileInputs.cache
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Models\obj\Debug\net10.0\RiskEngine.Models.dll
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Models\obj\Debug\net10.0\refint\RiskEngine.Models.dll
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Models\obj\Debug\net10.0\RiskEngine.Models.pdb
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Models\obj\Debug\net10.0\ref\RiskEngine.Models.dll

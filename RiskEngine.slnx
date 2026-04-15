@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="RiskEngine.Coordinator/RiskEngine.Coordinator.csproj" />
+  <Project Path="RiskEngine.Models/RiskEngine.Models.csproj" />
+  <Project Path="RiskEngine.Protos/RiskEngine.Protos.csproj" />
+  <Project Path="RiskEngine.Worker/RiskEngine.Worker.csproj" />
+</Solution>

@@ -1,0 +1,2 @@
+obj\Debug\net10.0\Protos/RiskSimulation.cs \
+obj\Debug\net10.0\Protos/RiskSimulationGrpc.cs: Protos/risk_simulation.proto
