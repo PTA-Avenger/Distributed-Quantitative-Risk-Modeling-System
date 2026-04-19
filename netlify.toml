@@ -1,0 +1,17 @@
+[build]
+  # Tell Netlify that the frontend project lives in this subdirectory
+  base = "RiskEngine.Frontend"
+  
+  # The command Netlify should run to build the Vite project
+  command = "npm run build"
+  
+  # The output folder created by Vite (relative to the base directory)
+  publish = "dist"
+
+# Essential for React / Single Page Applications!
+# This tells Netlify to redirect all URL paths to index.html 
+# so React Router can process the URL instead of returning a 404.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
