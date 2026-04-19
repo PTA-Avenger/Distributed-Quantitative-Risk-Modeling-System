@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  postgres_db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: RiskEngine
+    ports:
+      - "5432:5432"
+    # This command tells Docker to AUTOMATICALLY restart this container on laptop boot
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  worker_1:
+    build:
+      context: .
+      dockerfile: RiskEngine.Worker/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "7001:8080"
+
+  worker_2:
+    build:
+      context: .
+      dockerfile: RiskEngine.Worker/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "7002:8080"
+
+  coordinator:
+    build:
+      context: .
+      dockerfile: RiskEngine.Coordinator/Dockerfile
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgres_db;Database=RiskEngine;Username=postgres;Password=postgres
+      - WorkerUrls__0=http://worker_1:8080
+      - WorkerUrls__1=http://worker_2:8080
+    ports:
+      - "5001:8080"
+    restart: unless-stopped
+    depends_on:
+      - postgres_db
+
+volumes:
+  pgdata:
