@@ -31,5 +31,4 @@ services:
 databases:
   - name: risk-engine-db
     databaseName: riskengine
-    user: postgres
     plan: starter
