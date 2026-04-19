@@ -1,9 +1,11 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Activity, BarChart2, Settings, Terminal, Play } from 'lucide-react';
+import { Activity, BarChart2, Settings, Terminal, Play, BookOpen } from 'lucide-react';
 import Dashboard from './pages/Dashboard';
 import SimulationConfig from './pages/SimulationConfig';
 import LiveMonitor from './pages/LiveMonitor';
 import Results from './pages/Results';
+import CrashCourse from './pages/CrashCourse';
+import Explorer from './pages/Explorer';
 
 const SidebarItem = ({ to, icon: Icon, label }: { to: string, icon: any, label: string }) => {
   const location = useLocation();
@@ -67,6 +69,7 @@ function App() {
             <SidebarItem to="/" icon={Activity} label="Dashboard" />
             <SidebarItem to="/simulate" icon={Play} label="New Simulation" />
             <SidebarItem to="/results/latest" icon={BarChart2} label="Results" />
+            <SidebarItem to="/crash-course" icon={BookOpen} label="Crash Course" />
             <SidebarItem to="/explorer" icon={Settings} label="GraphQL Explorer" />
           </div>
 
@@ -88,11 +91,8 @@ function App() {
             <Route path="/simulate" element={<SimulationConfig />} />
             <Route path="/simulate/:id" element={<LiveMonitor />} />
             <Route path="/results/:id" element={<Results />} />
-            <Route path="/explorer" element={
-              <div className="panel" style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span className="text-section-header">GraphQL Explorer (Altair) will be embedded here.</span>
-              </div>
-            } />
+            <Route path="/crash-course" element={<CrashCourse />} />
+            <Route path="/explorer" element={<Explorer />} />
           </Routes>
         </div>
       </div>

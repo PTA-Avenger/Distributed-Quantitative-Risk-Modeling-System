@@ -1,12 +1,40 @@
+import React, { useRef } from 'react';
 import { useSimulationStore } from '../store/useSimulationStore';
 import { useNavigate } from 'react-router-dom';
+import { Upload, Plus, Trash2 } from 'lucide-react';
 
 export default function SimulationConfig() {
   const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { 
     numberOfPaths, timeHorizonYears, timeSteps, initialPortfolioValue, 
-    assets, correlationMatrix, setSimulationParam, setAssetWeight 
+    assets, correlationMatrix, setSimulationParam, setAssetWeight,
+    setAssets, addAsset, removeAsset
   } = useSimulationStore();
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      const rows = text.split('\n').filter(r => r.trim().length > 0);
+      const newAssets = rows.slice(1).map((row, i) => {
+        const [id, name, weight, drift, vol, price] = row.split(',').map(s => s.trim());
+        return {
+          id: id || `csv-${i}`,
+          name: name || 'UNK',
+          weight: parseFloat(weight) || 0,
+          drift: parseFloat(drift) || 0,
+          volatility: parseFloat(vol) || 0,
+          initialPrice: parseFloat(price) || 0
+        };
+      });
+      if (newAssets.length > 0) setAssets(newAssets);
+    };
+    reader.readAsText(file);
+  };
+
 
   const totalWeight = assets.reduce((sum, a) => sum + a.weight, 0);
   const weightIsInvalid = Math.abs(totalWeight - 1.0) > 0.001;
@@ -82,12 +110,25 @@ export default function SimulationConfig() {
           <div className="panel" style={{ height: '100%' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
               <h3 className="text-section-header">Portfolio Assets</h3>
-              <span style={{ 
-                fontFamily: '"IBM Plex Mono"', fontSize: '11px', 
-                color: weightIsInvalid ? 'var(--accent-danger)' : 'var(--accent-safe)' 
-              }}>
-                Σ W = {totalWeight.toFixed(2)}
-              </span>
+              <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                <span style={{ 
+                  fontFamily: '"IBM Plex Mono"', fontSize: '11px', 
+                  color: weightIsInvalid ? 'var(--accent-danger)' : 'var(--accent-safe)' 
+                }}>
+                  Σ W = {totalWeight.toFixed(2)}
+                </span>
+                <button className="btn-primary" style={{ padding: '6px 12px', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px' }} onClick={() => addAsset()}>
+                  <Plus size={14} /> Row
+                </button>
+                <input type="file" accept=".csv" style={{ display: 'none' }} ref={fileInputRef} onChange={handleFileUpload} />
+                <button className="btn-primary" style={{ padding: '6px 12px', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px', backgroundColor: 'var(--bg-elevated)', color: 'var(--text-primary)', border: '1px solid var(--bg-border)' }} onClick={() => fileInputRef.current?.click()}>
+                  <Upload size={14} /> Upload CSV
+                </button>
+              </div>
+            </div>
+
+            <div style={{ marginBottom: '16px', fontSize: '11px', color: 'var(--text-secondary)', backgroundColor: 'var(--bg-base)', padding: '8px', borderLeft: '2px solid var(--accent-safe)' }}>
+              Upload standard CSV: <code>ID, Name, Weight, Drift, Volatility, Price</code>
             </div>
 
             <table>
@@ -98,6 +139,7 @@ export default function SimulationConfig() {
                   <th>Drift (μ)</th>
                   <th>Vol (σ)</th>
                   <th>Price</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -116,6 +158,11 @@ export default function SimulationConfig() {
                     <td>{asset.drift.toFixed(2)}</td>
                     <td>{asset.volatility.toFixed(2)}</td>
                     <td>{asset.initialPrice}</td>
+                    <td>
+                      <button onClick={() => removeAsset(asset.id)} style={{ background: 'transparent', border: 'none', color: 'var(--text-dim)', cursor: 'pointer' }}>
+                        <Trash2 size={14} />
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

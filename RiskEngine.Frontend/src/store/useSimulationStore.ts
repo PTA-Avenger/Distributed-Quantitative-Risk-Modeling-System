@@ -18,9 +18,12 @@ interface SimulationState {
   assets: Asset[];
   correlationMatrix: number[][]; // Hardcoded covariance/correlation scope
   
+  setAssets: (assets: Asset[]) => void;
+  addAsset: () => void;
+  removeAsset: (id: string) => void;
   setAssetWeight: (id: string, weight: number) => void;
   updateAsset: (id: string, updates: Partial<Asset>) => void;
-  setSimulationParam: (key: keyof Omit<SimulationState, 'assets' | 'correlationMatrix' | 'setAssetWeight' | 'updateAsset' | 'setSimulationParam'>, value: number) => void;
+  setSimulationParam: (key: keyof Omit<SimulationState, 'assets' | 'correlationMatrix' | 'setAssetWeight' | 'updateAsset' | 'setSimulationParam' | 'setAssets' | 'addAsset' | 'removeAsset'>, value: number) => void;
   
   // For the active simulation
   activeSimId: string | null;
@@ -47,6 +50,42 @@ export const useSimulationStore = create<SimulationState>((set) => ({
     [0.65, 1.00, 0.40],
     [0.35, 0.40, 1.00],
   ],
+
+  setAssets: (newAssets) => set((state) => {
+    // Automatically rebuild a dummy correlation matrix based on n assets
+    const n = newAssets.length;
+    const newMatrix = Array.from({ length: n }, (_, i) => 
+      Array.from({ length: n }, (_, j) => (i === j ? 1.0 : 0.0))
+    );
+    return { assets: newAssets, correlationMatrix: newMatrix };
+  }),
+
+  addAsset: () => set((state) => {
+    const newAsset: Asset = {
+      id: Math.random().toString(36).substr(2, 9),
+      name: 'NEW',
+      weight: 0.0,
+      drift: 0.0,
+      volatility: 0.1,
+      initialPrice: 100
+    };
+    const newAssets = [...state.assets, newAsset];
+    const n = newAssets.length;
+    const newMatrix = Array.from({ length: n }, (_, i) => 
+      Array.from({ length: n }, (_, j) => (i === j ? 1.0 : 0.0))
+    );
+    return { assets: newAssets, correlationMatrix: newMatrix };
+  }),
+
+  removeAsset: (id) => set((state) => {
+    const newAssets = state.assets.filter(a => a.id !== id);
+    const n = newAssets.length;
+    const newMatrix = Array.from({ length: n }, (_, i) => 
+      Array.from({ length: n }, (_, j) => (i === j ? 1.0 : 0.0))
+    );
+    return { assets: newAssets, correlationMatrix: newMatrix };
+  }),
+
 
   setAssetWeight: (id, weight) => set((state) => ({
     assets: state.assets.map(a => a.id === id ? { ...a, weight } : a)

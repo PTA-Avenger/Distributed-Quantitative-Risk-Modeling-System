@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { BarChart, Bar, ResponsiveContainer } from 'recharts';
 
 const MetricCard = ({ label, value, delta, isBad = false }: { label: string, value: string, delta: string, isBad?: boolean }) => {
   return (
@@ -16,6 +17,11 @@ const MetricCard = ({ label, value, delta, isBad = false }: { label: string, val
 
 export default function Dashboard() {
   const [mounted, setMounted] = useState(false);
+  
+  // Dummy distribution data
+  const histData = Array.from({ length: 20 }).map((_, i) => ({
+    freq: Math.floor(Math.pow(Math.E, -Math.pow((i-10)/3, 2)) * 100)
+  }));
   
   useEffect(() => {
     setMounted(true);
@@ -92,8 +98,12 @@ export default function Dashboard() {
         <div style={{ gridColumn: 'span 4' }}>
           <div className="panel" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
             <h3 className="text-section-header" style={{ marginBottom: '16px' }}>Last Distribution</h3>
-            <div style={{ flex: 1, backgroundColor: 'var(--bg-elevated)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-dim)', fontSize: '11px', borderRadius: '2px' }}>
-               Histogram Preview
+            <div style={{ flex: 1, backgroundColor: 'var(--bg-elevated)', borderRadius: '2px', padding: '16px 0 0 0', overflow: 'hidden' }}>
+               <ResponsiveContainer width="100%" height="100%">
+                 <BarChart data={histData}>
+                   <Bar dataKey="freq" fill="var(--accent-primary)" />
+                 </BarChart>
+               </ResponsiveContainer>
             </div>
           </div>
         </div>
