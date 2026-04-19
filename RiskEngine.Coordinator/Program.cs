@@ -43,14 +43,12 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Automatically apply DB migrations
+// Automatically apply schema creation
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    if (db.Database.GetPendingMigrations().Any())
-    {
-        db.Database.Migrate();
-    }
+    // Safely creates the PostgreSQL tables on cold start
+    db.Database.EnsureCreated();
 }
 
 app.MapGraphQL();

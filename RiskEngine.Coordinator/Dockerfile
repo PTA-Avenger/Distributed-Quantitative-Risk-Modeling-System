@@ -9,7 +9,8 @@ RUN dotnet restore RiskEngine.Coordinator/RiskEngine.Coordinator.csproj
 
 COPY . .
 WORKDIR /src/RiskEngine.Coordinator
-RUN dotnet publish -c Release -o /app/publish
+# Use /m:1 to restrict MSBuild to a single core, avoiding 512MB RAM limits on Render Free Tier
+RUN dotnet publish -c Release -o /app/publish -p:UseAppHost=false /m:1
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
 WORKDIR /app
