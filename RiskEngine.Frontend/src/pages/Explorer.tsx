@@ -13,7 +13,7 @@ export default function Explorer() {
           <span className="font-mono-data" style={{ color: 'var(--accent-primary)' }}>POST /graphql</span>
         </div>
         <div style={{ flex: 1, overflow: 'hidden' }}>
-          <iframe src="https://risk-engine-coordinator.onrender.com/graphql" style={{ width: '100%', height: '100%', border: 'none' }} title="GraphQL API Explorer" />
+          <iframe src="https://risk-engine-coordinator.onrender.com/graphql/" style={{ width: '100%', height: '100%', border: 'none' }} title="GraphQL API Explorer" />
         </div>
       </div>
     </div>

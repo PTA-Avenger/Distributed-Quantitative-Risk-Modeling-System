@@ -1,11 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink } from '@apollo/client';
 import App from './App.tsx'
 import './index.css'
 
-const client = new ApolloClient({
+const httpLink = new HttpLink({
   uri: 'https://risk-engine-coordinator.onrender.com/graphql',
+});
+
+const client = new ApolloClient({
+  link: httpLink,
   cache: new InMemoryCache(),
 });
 

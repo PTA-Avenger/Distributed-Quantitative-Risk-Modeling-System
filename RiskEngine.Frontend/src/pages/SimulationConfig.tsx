@@ -5,7 +5,7 @@ import { Upload, Plus, Trash2 } from 'lucide-react';
 import { gql, useLazyQuery } from '@apollo/client';
 
 const EXECUTE_SIMULATION = gql`
-  query ExecuteSimulation($req: SimulationRequestInputInput!) {
+  query ExecuteSimulation($req: SimulationRequestInput!) {
     executeSimulation(request: $req) {
       var95
       cvar95
@@ -26,17 +26,7 @@ export default function SimulationConfig() {
     setAssets, addAsset, removeAsset, setIsSimulating, isSimulating, setResults
   } = useSimulationStore();
   
-  const [executeSim] = useLazyQuery(EXECUTE_SIMULATION, {
-    onCompleted: (data) => {
-      setResults(data.executeSimulation.var95, data.executeSimulation.cvar95, data.executeSimulation.pnlDistribution);
-      setIsSimulating(false);
-      navigate(`/results/LATEST`);
-    },
-    onError: (error) => {
-      console.error(error);
-      setIsSimulating(false);
-    }
-  });
+  const [executeSim] = useLazyQuery(EXECUTE_SIMULATION);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -65,25 +55,42 @@ export default function SimulationConfig() {
   const totalWeight = assets.reduce((sum, a) => sum + a.weight, 0);
   const weightIsInvalid = Math.abs(totalWeight - 1.0) > 0.001;
 
-  const handleExecute = () => {
+  const handleExecute = async () => {
     setIsSimulating(true);
-    executeSim({
-      variables: {
-        req: {
-          paths: numberOfPaths,
-          horizon: timeHorizonYears,
-          steps: timeSteps,
-          initialPortfolioValue: initialPortfolioValue,
-          assets: assets.map(a => ({
-            weight: a.weight,
-            drift: a.drift,
-            volatility: a.volatility,
-            initialPrice: a.initialPrice
-          })),
-          correlationMatrix: correlationMatrix
+    try {
+      const response = await executeSim({
+        variables: {
+          req: {
+            paths: numberOfPaths,
+            horizon: timeHorizonYears,
+            steps: timeSteps,
+            initialPortfolioValue: initialPortfolioValue,
+            assets: assets.map(a => ({
+              weight: a.weight,
+              drift: a.drift,
+              volatility: a.volatility,
+              initialPrice: a.initialPrice
+            })),
+            correlationMatrix: correlationMatrix
+          }
         }
+      });
+
+      if (response.data && response.data.executeSimulation) {
+        setResults(
+          response.data.executeSimulation.var95, 
+          response.data.executeSimulation.cvar95, 
+          response.data.executeSimulation.pnlDistribution
+        );
+        setIsSimulating(false);
+        navigate(`/results/LATEST`);
+      } else {
+        setIsSimulating(false);
       }
-    });
+    } catch (e) {
+      console.error(e);
+      setIsSimulating(false);
+    }
   };
 
   return (
