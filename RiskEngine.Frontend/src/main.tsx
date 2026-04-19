@@ -5,7 +5,7 @@ import App from './App.tsx'
 import './index.css'
 
 const client = new ApolloClient({
-  uri: 'http://localhost:5001/graphql', // Assuming default Coordinator port
+  uri: 'https://risk-engine-coordinator.onrender.com/graphql',
   cache: new InMemoryCache(),
 });
 

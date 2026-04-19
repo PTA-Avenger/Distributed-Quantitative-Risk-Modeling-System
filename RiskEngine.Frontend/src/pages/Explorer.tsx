@@ -15,7 +15,7 @@ export default function Explorer() {
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ textAlign: 'center', maxWidth: '400px' }}>
             <p className="text-body" style={{ marginBottom: '16px' }}>
-              The interactive GraphQL playground is normally embedded here via iframe pointing to <code style={{ color: 'var(--accent-safe)' }}>http://localhost:5001/graphql</code>.
+              The interactive GraphQL playground is normally embedded here via iframe pointing to <code style={{ color: 'var(--accent-safe)' }}>https://risk-engine-coordinator.onrender.com/graphql</code>.
             </p>
             <div style={{ padding: '16px', backgroundColor: 'var(--bg-base)', border: '1px solid var(--bg-border)', borderRadius: '2px', textAlign: 'left' }}>
               <pre className="font-mono-data" style={{ fontSize: '11px', color: 'var(--text-dim)' }}>
