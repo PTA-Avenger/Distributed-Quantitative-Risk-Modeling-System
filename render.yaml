@@ -5,7 +5,7 @@ services:
     dockerfilePath: ./RiskEngine.Coordinator/Dockerfile
     plan: free
     envVars:
-      - key: DefaultConnection
+      - key: ConnectionStrings__DefaultConnection
         fromDatabase:
           name: risk-engine-db
           property: connectionString
