@@ -40,3 +40,4 @@ C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net
 C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\RiskEngine.Worker.pdb
 C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\RiskEngine.Worker.genruntimeconfig.cache
 C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\ref\RiskEngine.Worker.dll
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\RiskEngine.Worker.sourcelink.json

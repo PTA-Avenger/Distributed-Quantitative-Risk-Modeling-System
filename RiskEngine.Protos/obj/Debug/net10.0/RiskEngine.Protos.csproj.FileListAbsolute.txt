@@ -10,3 +10,4 @@ C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Protos\obj\Debug\net
 C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Protos\obj\Debug\net10.0\refint\RiskEngine.Protos.dll
 C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Protos\obj\Debug\net10.0\RiskEngine.Protos.pdb
 C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Protos\obj\Debug\net10.0\ref\RiskEngine.Protos.dll
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Protos\obj\Debug\net10.0\RiskEngine.Protos.sourcelink.json
