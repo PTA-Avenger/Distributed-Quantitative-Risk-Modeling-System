@@ -3,7 +3,7 @@ services:
     name: risk-engine-coordinator
     env: docker
     dockerfilePath: ./RiskEngine.Coordinator/Dockerfile
-    plan: starter
+    plan: free
     envVars:
       - key: DefaultConnection
         fromDatabase:
@@ -16,19 +16,19 @@ services:
       - key: WorkerUrls__1
         value: "http://risk-engine-worker-2:8080"
       
-  - type: pserv
+  - type: web
     name: risk-engine-worker-1
     env: docker
     dockerfilePath: ./RiskEngine.Worker/Dockerfile
-    plan: starter
+    plan: free
 
-  - type: pserv
+  - type: web
     name: risk-engine-worker-2
     env: docker
     dockerfilePath: ./RiskEngine.Worker/Dockerfile
-    plan: starter
+    plan: free
 
 databases:
   - name: risk-engine-db
     databaseName: riskengine
-    plan: starter
+    plan: free
