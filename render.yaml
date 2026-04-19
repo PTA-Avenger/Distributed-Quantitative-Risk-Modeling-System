@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: risk-engine-coordinator
+    env: docker
+    dockerfilePath: ./RiskEngine.Coordinator/Dockerfile
+    plan: starter
+    envVars:
+      - key: DefaultConnection
+        fromDatabase:
+          name: risk-engine-db
+          property: connectionString
+      - key: Jwt__Key
+        generateValue: true
+      - key: WorkerUrls__0
+        value: "http://risk-engine-worker-1:8080"
+      - key: WorkerUrls__1
+        value: "http://risk-engine-worker-2:8080"
+      
+  - type: pserv
+    name: risk-engine-worker-1
+    env: docker
+    dockerfilePath: ./RiskEngine.Worker/Dockerfile
+    plan: starter
+
+  - type: pserv
+    name: risk-engine-worker-2
+    env: docker
+    dockerfilePath: ./RiskEngine.Worker/Dockerfile
+    plan: starter
+
+databases:
+  - name: risk-engine-db
+    databaseName: riskengine
+    user: postgres
+    plan: starter

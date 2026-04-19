@@ -1,7 +1,32 @@
 using RiskEngine.Coordinator.GraphQL;
 using RiskEngine.Coordinator.Services;
+using RiskEngine.Coordinator.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// DB Context Setup
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Host=localhost;Database=RiskEngine;Username=postgres;Password=postgres";
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+
+// Authentication Setup
+var jwtKey = builder.Configuration["Jwt:Key"] ?? "VeryLongSecretStringForTestingBecauseThisIsPrototype";
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        };
+    });
+builder.Services.AddAuthorization();
 
 // Ensure trailing slash for Grpc addresses isn't strictly required but best practice.
 // Worker URLs configured in appsettings.json or use default for local testing
@@ -10,9 +35,23 @@ builder.Services.AddSingleton<SimulationOrchestrator>();
 
 builder.Services
     .AddGraphQLServer()
-    .AddQueryType<Query>();
+    .AddAuthorization()
+    .AddQueryType<Query>()
+    .AddMutationType<AuthMutation>();
 
 var app = builder.Build();
+app.UseAuthentication();
+app.UseAuthorization();
+
+// Automatically apply DB migrations
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    if (db.Database.GetPendingMigrations().Any())
+    {
+        db.Database.Migrate();
+    }
+}
 
 app.MapGraphQL();
 app.MapGet("/", () => "Risk Engine Coordinator running. Go to /graphql to execute queries.");
