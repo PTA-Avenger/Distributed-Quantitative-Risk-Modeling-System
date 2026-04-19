@@ -9,7 +9,21 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // DB Context Setup
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Host=localhost;Database=RiskEngine;Username=postgres;Password=postgres";
+var rawConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+string connectionString = "Host=localhost;Database=RiskEngine;Username=postgres;Password=postgres";
+
+if (!string.IsNullOrEmpty(rawConnectionString) && rawConnectionString.Contains("://"))
+{
+    // Parse Render's postgres:// URI into a valid .NET Npgsql format
+    var uri = new Uri(rawConnectionString);
+    var userInfo = uri.UserInfo.Split(':');
+    connectionString = $"Host={uri.Host};Database={uri.LocalPath.Substring(1)};Username={userInfo[0]};Password={userInfo[1]};Port={(uri.Port > 0 ? uri.Port : 5432)};";
+}
+else if (!string.IsNullOrEmpty(rawConnectionString))
+{
+    connectionString = rawConnectionString;
+}
+
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
 // Authentication Setup
