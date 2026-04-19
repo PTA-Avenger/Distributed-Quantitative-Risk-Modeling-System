@@ -12,28 +12,8 @@ export default function Explorer() {
         <div style={{ backgroundColor: 'var(--bg-elevated)', padding: '12px', borderBottom: '1px solid var(--bg-border)', display: 'flex', gap: '16px' }}>
           <span className="font-mono-data" style={{ color: 'var(--accent-primary)' }}>POST /graphql</span>
         </div>
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ textAlign: 'center', maxWidth: '400px' }}>
-            <p className="text-body" style={{ marginBottom: '16px' }}>
-              The interactive GraphQL playground is normally embedded here via iframe pointing to <code style={{ color: 'var(--accent-safe)' }}>https://risk-engine-coordinator.onrender.com/graphql</code>.
-            </p>
-            <div style={{ padding: '16px', backgroundColor: 'var(--bg-base)', border: '1px solid var(--bg-border)', borderRadius: '2px', textAlign: 'left' }}>
-              <pre className="font-mono-data" style={{ fontSize: '11px', color: 'var(--text-dim)' }}>
-{`query SimulatePortfolio {
-  executeSimulation(request: {
-    paths: 100000,
-    horizon: 1.0,
-    steps: 252
-  }) {
-    var95
-    cvar95
-    pnlDistribution
-  }
-}`}
-              </pre>
-            </div>
-            <p className="text-body" style={{ marginTop: '16px', fontSize: '11px' }}>* Ensure the .NET Coordinator service is running locally.</p>
-          </div>
+        <div style={{ flex: 1, overflow: 'hidden' }}>
+          <iframe src="https://risk-engine-coordinator.onrender.com/graphql" style={{ width: '100%', height: '100%', border: 'none' }} title="GraphQL API Explorer" />
         </div>
       </div>
     </div>
