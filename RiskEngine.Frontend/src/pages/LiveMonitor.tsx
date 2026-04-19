@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 export default function LiveMonitor() {
@@ -9,16 +9,18 @@ export default function LiveMonitor() {
   
   useEffect(() => {
     // Simulate incoming data over 5 seconds
+    let currentProgress = 0;
     const interval = setInterval(() => {
-      setProgress(p => {
-        if (p >= 100) {
-          clearInterval(interval);
-          setTimeout(() => navigate(`/results/${id}`), 500); // Auto navigate to results when done
-          return 100;
-        }
-        setLogs(prev => [`[WORKER] Processed ${Math.round(p * 1000)} paths...`, ...prev].slice(0, 50));
-        return p + Math.random() * 5;
-      });
+      currentProgress += Math.random() * 5;
+      if (currentProgress >= 100) {
+        currentProgress = 100;
+        setProgress(100);
+        clearInterval(interval);
+        setTimeout(() => navigate(`/results/${id || 'LATEST'}`), 500); // Auto navigate to results when done
+      } else {
+        setProgress(currentProgress);
+      }
+      setLogs(prev => [`[WORKER] Processed ${Math.round(currentProgress * 1000)} paths...`, ...prev].slice(0, 50));
     }, 100);
     
     return () => clearInterval(interval);
