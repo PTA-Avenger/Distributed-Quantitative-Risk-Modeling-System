@@ -2,6 +2,20 @@ import React, { useRef } from 'react';
 import { useSimulationStore } from '../store/useSimulationStore';
 import { useNavigate } from 'react-router-dom';
 import { Upload, Plus, Trash2 } from 'lucide-react';
+import { gql, useLazyQuery } from '@apollo/client';
+
+const EXECUTE_SIMULATION = gql`
+  query ExecuteSimulation($req: SimulationRequestInputInput!) {
+    executeSimulation(request: $req) {
+      var95
+      cvar95
+      pnlDistribution {
+        bucket
+        freq
+      }
+    }
+  }
+`;
 
 export default function SimulationConfig() {
   const navigate = useNavigate();
@@ -9,8 +23,20 @@ export default function SimulationConfig() {
   const { 
     numberOfPaths, timeHorizonYears, timeSteps, initialPortfolioValue, 
     assets, correlationMatrix, setSimulationParam, setAssetWeight,
-    setAssets, addAsset, removeAsset
+    setAssets, addAsset, removeAsset, setIsSimulating, isSimulating, setResults
   } = useSimulationStore();
+  
+  const [executeSim] = useLazyQuery(EXECUTE_SIMULATION, {
+    onCompleted: (data) => {
+      setResults(data.executeSimulation.var95, data.executeSimulation.cvar95, data.executeSimulation.pnlDistribution);
+      setIsSimulating(false);
+      navigate(`/results/LATEST`);
+    },
+    onError: (error) => {
+      console.error(error);
+      setIsSimulating(false);
+    }
+  });
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -40,9 +66,24 @@ export default function SimulationConfig() {
   const weightIsInvalid = Math.abs(totalWeight - 1.0) > 0.001;
 
   const handleExecute = () => {
-    // In a real app, we'd fire the GraphQL mutation and get the ID.
-    const newSimId = 'SIM-' + Math.floor(Math.random() * 10000);
-    navigate(`/simulate/${newSimId}`);
+    setIsSimulating(true);
+    executeSim({
+      variables: {
+        req: {
+          paths: numberOfPaths,
+          horizon: timeHorizonYears,
+          steps: timeSteps,
+          initialPortfolioValue: initialPortfolioValue,
+          assets: assets.map(a => ({
+            weight: a.weight,
+            drift: a.drift,
+            volatility: a.volatility,
+            initialPrice: a.initialPrice
+          })),
+          correlationMatrix: correlationMatrix
+        }
+      }
+    });
   };
 
   return (
@@ -52,10 +93,10 @@ export default function SimulationConfig() {
         <button 
           className="btn-primary" 
           onClick={handleExecute}
-          disabled={weightIsInvalid}
-          style={{ opacity: weightIsInvalid ? 0.5 : 1, cursor: weightIsInvalid ? 'not-allowed' : 'pointer' }}
+          disabled={weightIsInvalid || isSimulating}
+          style={{ opacity: (weightIsInvalid || isSimulating) ? 0.5 : 1, cursor: (weightIsInvalid || isSimulating) ? 'not-allowed' : 'pointer' }}
         >
-          Execute Simulation [⌘ Enter]
+          {isSimulating ? 'Processing via gRPC Cluster...' : 'Execute Simulation [⌘ Enter]'}
         </button>
       </div>
 

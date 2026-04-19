@@ -1,17 +1,20 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { useSimulationStore } from '../store/useSimulationStore';
 
 export default function Results() {
   const { id } = useParams();
 
-  // Generate some dummy distribution data resembling a normal distribution
-  const data = Array.from({ length: 50 }).map((_, i) => ({
+  const { resultsVaR, resultsCVaR, resultsDistribution } = useSimulationStore();
+
+  // Draw real returned distribution or fallback
+  const data = resultsDistribution.length > 0 ? resultsDistribution : Array.from({ length: 50 }).map((_, i) => ({
     bucket: ((i - 25) * 10000).toLocaleString(),
-    freq: Math.floor(Math.pow(Math.E, -Math.pow((i-25)/8, 2)) * 1500)
+    freq: 0
   }));
 
-  const varBucket = data[15].bucket;
+  const varBucket = data.length > 0 ? data[Math.floor(data.length * 0.05)]?.bucket : '0';
 
   return (
     <div className="page-enter" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -27,11 +30,11 @@ export default function Results() {
               
               <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--bg-border)', paddingBottom: '8px' }}>
                 <span className="text-section-header">VAR (95%)</span>
-                <span className="font-mono-data" style={{ color: 'var(--accent-danger)' }}>-$142,300</span>
+                <span className="font-mono-data" style={{ color: 'var(--accent-danger)' }}>{resultsVaR < 0 ? '-' : ''}${Math.abs(resultsVaR).toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--bg-border)', paddingBottom: '8px' }}>
                 <span className="text-section-header">CVAR (95%)</span>
-                <span className="font-mono-data" style={{ color: 'var(--accent-danger)' }}>-$198,450</span>
+                <span className="font-mono-data" style={{ color: 'var(--accent-danger)' }}>{resultsCVaR < 0 ? '-' : ''}${Math.abs(resultsCVaR).toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--bg-border)', paddingBottom: '8px' }}>
                 <span className="text-section-header">EXPECTED P&L</span>

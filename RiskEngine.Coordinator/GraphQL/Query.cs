@@ -5,53 +5,85 @@ namespace RiskEngine.Coordinator.GraphQL;
 
 public class Query
 {
-    public async Task<SimulationResultPayload> GetPortfolioRiskAsync(
+    public async Task<SimulationResultPayload> ExecuteSimulation(
         [Service] SimulationOrchestrator orchestrator,
-        int numberOfPaths = 100000,
-        double confidenceLevel = 0.99,
-        double timeHorizonYears = 1.0)
+        SimulationRequestInput request,
+        double confidenceLevel = 0.95)
     {
-        // For demonstration, we build a dummy portfolio with 2 correlated assets.
-        // In a real system, these would be passed in or fetched from a database.
+        int n = request.Assets.Count;
         
-        var request = new SimulationRequest
+        var rpcRequest = new SimulationRequest
         {
-            NumberOfPaths = numberOfPaths,
-            TimeHorizonYears = timeHorizonYears,
-            TimeSteps = 252, // Daily steps in trading year
-            PortfolioSize = 2,
-            InitialPortfolioValue = 100000.0,
+            NumberOfPaths = request.Paths,
+            TimeHorizonYears = request.Horizon,
+            TimeSteps = request.Steps,
+            PortfolioSize = n,
+            InitialPortfolioValue = request.InitialPortfolioValue,
         };
 
-        request.InitialPrices.AddRange(new[] { 150.0, 200.0 });
-        request.Weights.AddRange(new[] { 0.6, 0.4 });
-        request.Drifts.AddRange(new[] { 0.08, 0.12 });
-        request.Volatilities.AddRange(new[] { 0.20, 0.25 });
+        rpcRequest.InitialPrices.AddRange(request.Assets.Select(a => a.InitialPrice));
+        rpcRequest.Weights.AddRange(request.Assets.Select(a => a.Weight));
+        rpcRequest.Drifts.AddRange(request.Assets.Select(a => a.Drift));
+        rpcRequest.Volatilities.AddRange(request.Assets.Select(a => a.Volatility));
 
-        // Cholesky decomposition of a 2x2 correlation matrix with rho = 0.5
-        // [1.0, 0.5]
-        // [0.5, 1.0] -> Cholesky Lower Triangle:
-        // L11 = 1.0
-        // L21 = 0.5, L22 = sqrt(1 - 0.5^2) = 0.866025
-        // Flattened row-major: [1.0, 0.0, 0.5, 0.866025]
-        request.CholeskyMatrix.AddRange(new[] { 1.0, 0.0, 0.5, 0.866025 });
+        // Execute Cholesky Factorization on C# side (O(N^3))
+        double[,] lower = new double[n, n];
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j <= i; j++)
+            {
+                double sum = 0;
+                if (j == i)
+                {
+                    for (int k = 0; k < j; k++) sum += Math.Pow(lower[j, k], 2);
+                    lower[j, j] = Math.Sqrt(Math.Max(0.0001, request.CorrelationMatrix[j][j] - sum));
+                }
+                else
+                {
+                    for (int k = 0; k < j; k++) sum += (lower[i, k] * lower[j, k]);
+                    lower[i, j] = (request.CorrelationMatrix[i][j] - sum) / lower[j, j];
+                }
+            }
+        }
 
-        var metrics = await orchestrator.RunDistributedSimulationAsync(request, confidenceLevel);
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < n; j++) {
+                rpcRequest.CholeskyMatrix.Add(lower[i, j]);
+            }
+        }
+
+        var metrics = await orchestrator.RunDistributedSimulationAsync(rpcRequest, confidenceLevel);
 
         return new SimulationResultPayload
         {
-            ValueAtRisk = metrics.ValueAtRisk,
-            ExpectedShortfall = metrics.ExpectedShortfall,
-            ConfidenceLevel = confidenceLevel,
-            PathsSimulated = numberOfPaths
+            Var95 = metrics.ValueAtRisk,
+            Cvar95 = metrics.ExpectedShortfall,
+            PnlDistribution = metrics.PnlDistribution
         };
     }
 }
 
+public class SimulationRequestInput
+{
+    public int Paths { get; set; } = 100000;
+    public double Horizon { get; set; } = 1.0;
+    public int Steps { get; set; } = 252;
+    public double InitialPortfolioValue { get; set; } = 1000000;
+    public List<AssetInput> Assets { get; set; } = new();
+    public List<List<double>> CorrelationMatrix { get; set; } = new();
+}
+
+public class AssetInput
+{
+    public double Weight { get; set; }
+    public double Drift { get; set; }
+    public double Volatility { get; set; }
+    public double InitialPrice { get; set; }
+}
+
 public class SimulationResultPayload
 {
-    public double ValueAtRisk { get; set; }
-    public double ExpectedShortfall { get; set; }
-    public double ConfidenceLevel { get; set; }
-    public int PathsSimulated { get; set; }
+    public double Var95 { get; set; }
+    public double Cvar95 { get; set; }
+    public List<DistributionBucket> PnlDistribution { get; set; } = new();
 }

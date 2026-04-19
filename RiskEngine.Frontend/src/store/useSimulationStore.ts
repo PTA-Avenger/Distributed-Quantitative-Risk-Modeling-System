@@ -28,6 +28,14 @@ interface SimulationState {
   // For the active simulation
   activeSimId: string | null;
   setActiveSimId: (id: string | null) => void;
+  
+  isSimulating: boolean;
+  setIsSimulating: (loading: boolean) => void;
+  
+  resultsVaR: number;
+  resultsCVaR: number;
+  resultsDistribution: { bucket: string, freq: number }[];
+  setResults: (var95: number, cvar95: number, distribution: any[]) => void;
 }
 
 export const useSimulationStore = create<SimulationState>((set) => ({
@@ -99,4 +107,12 @@ export const useSimulationStore = create<SimulationState>((set) => ({
   
   activeSimId: null,
   setActiveSimId: (id) => set({ activeSimId: id }),
+  
+  isSimulating: false,
+  setIsSimulating: (loading) => set({ isSimulating: loading }),
+  
+  resultsVaR: 0,
+  resultsCVaR: 0,
+  resultsDistribution: [],
+  setResults: (var95, cvar95, distribution) => set({ resultsVaR: var95, resultsCVaR: cvar95, resultsDistribution: distribution }),
 }));
