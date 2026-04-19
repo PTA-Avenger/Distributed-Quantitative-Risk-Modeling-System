@@ -1,0 +1,212 @@
+/* Reset and Base Setup */
+:root {
+  --bg-base:        #0a0b0d;   /* Near-black, slightly blue-tinted */
+  --bg-surface:     #111318;   /* Card / panel backgrounds */
+  --bg-elevated:    #181c24;   /* Input fields, table rows */
+  --bg-border:      #1f2533;   /* Grid lines, dividers */
+
+  --accent-primary: #f0a500;   /* Amber — P&L positive, CTAs */
+  --accent-danger:  #e03c3c;   /* Red — VaR breach, negative P&L */
+  --accent-safe:    #2ecc8a;   /* Green — healthy metrics */
+  --accent-muted:   #4a6fa5;   /* Blue — informational, worker status */
+
+  --text-primary:   #e8eaf0;   /* Main body text */
+  --text-secondary: #7a8499;   /* Labels, helper text */
+  --text-mono:      #a8b5cc;   /* Numerical data */
+  --text-dim:       #3d4455;   /* Disabled, placeholders */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: "Geist", sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  /* Dark terminal feel */
+  color-scheme: dark;
+}
+
+/* Typography Utility Classes */
+.font-mono-display {
+  font-family: "DM Mono", monospace;
+}
+
+.font-mono-data {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 13px;
+  color: var(--text-mono);
+}
+
+.text-metric {
+  font-family: "DM Mono", monospace;
+  font-size: 32px;
+  color: var(--accent-primary);
+  /* The spec states metric values 32-48px. Using 36px in some places so we'll adjust per component. */
+}
+
+.text-section-header {
+  font-family: "Geist", sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-secondary);
+}
+
+.text-body {
+  font-family: "Geist", sans-serif;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Base Component Styles */
+.panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--bg-border);
+  border-radius: 2px;
+  padding: 16px;
+}
+
+.panel.active {
+  border-top: 2px solid var(--accent-primary);
+}
+
+.panel.error {
+  border-top: 2px solid var(--accent-danger);
+}
+
+/* Grid layout based on specs: 12 col with 24px gutters */
+.layout-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 220px;
+  border-right: 1px solid var(--bg-border);
+  background-color: var(--bg-base);
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  max-width: 1440px;
+  padding: 24px;
+}
+
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
+}
+
+/* Inputs */
+input, select {
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--bg-border);
+  color: var(--text-primary);
+  border-radius: 2px;
+  padding: 8px 12px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.12s ease;
+}
+
+input:focus {
+  border-color: var(--accent-primary);
+}
+
+button {
+  cursor: pointer;
+  border-radius: 2px;
+  font-family: "Geist", sans-serif;
+  font-weight: 500;
+  transition: opacity 0.12s ease;
+  border: none;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+.btn-primary {
+  background-color: var(--accent-primary);
+  color: var(--bg-base);
+  padding: 12px 24px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+.btn-destructive {
+  background-color: transparent;
+  color: var(--accent-danger);
+  border: 1px solid var(--accent-danger);
+  padding: 8px 16px;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 13px;
+}
+
+th {
+  font-family: "Geist", sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-secondary);
+  text-align: left;
+  border-bottom: 1px solid var(--bg-border);
+  padding: 12px;
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid var(--bg-border);
+  color: var(--text-mono);
+}
+
+tr:hover {
+  background-color: var(--bg-elevated);
+  transition: background-color 0.06s;
+}
+
+/* Shimmer Loading */
+@keyframes shimmer {
+  0% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+  100% { opacity: 0.3; }
+}
+
+.skeleton-bar {
+  height: 20px;
+  background-color: var(--accent-primary); /* amber tint */
+  opacity: 0.3;
+  animation: shimmer 1.5s infinite;
+  border-radius: 2px;
+}
+
+/* Fade in page transition */
+.page-enter {
+  animation: fadeIn 0.12s linear;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
