@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "UtcEyyR9xVQ=",
+  "dgSpecHash": "DZyHmWp65rE=",
   "success": true,
   "projectFilePath": "C:\\Distributed-Quantitative-Risk-Modeling-System\\RiskEngine.Coordinator\\RiskEngine.Coordinator.csproj",
   "expectedPackageFiles": [
@@ -22,6 +22,7 @@
     "C:\\Users\\Thato\\.nuget\\packages\\hotchocolate\\15.1.14\\hotchocolate.15.1.14.nupkg.sha512",
     "C:\\Users\\Thato\\.nuget\\packages\\hotchocolate.abstractions\\15.1.14\\hotchocolate.abstractions.15.1.14.nupkg.sha512",
     "C:\\Users\\Thato\\.nuget\\packages\\hotchocolate.aspnetcore\\15.1.14\\hotchocolate.aspnetcore.15.1.14.nupkg.sha512",
+    "C:\\Users\\Thato\\.nuget\\packages\\hotchocolate.aspnetcore.authorization\\15.1.14\\hotchocolate.aspnetcore.authorization.15.1.14.nupkg.sha512",
     "C:\\Users\\Thato\\.nuget\\packages\\hotchocolate.authorization\\15.1.14\\hotchocolate.authorization.15.1.14.nupkg.sha512",
     "C:\\Users\\Thato\\.nuget\\packages\\hotchocolate.costanalysis\\15.1.14\\hotchocolate.costanalysis.15.1.14.nupkg.sha512",
     "C:\\Users\\Thato\\.nuget\\packages\\hotchocolate.execution\\15.1.14\\hotchocolate.execution.15.1.14.nupkg.sha512",

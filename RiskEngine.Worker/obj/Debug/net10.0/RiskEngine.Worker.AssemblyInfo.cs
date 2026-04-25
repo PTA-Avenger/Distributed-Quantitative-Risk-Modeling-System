@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RiskEngine.Worker")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2a5ee0c5d4f53d75425959f04cce0a99b3728da0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5b838bc859551a948e47f3f93e4f589b5949ebb8")]
 [assembly: System.Reflection.AssemblyProductAttribute("RiskEngine.Worker")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RiskEngine.Worker")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
