@@ -14,10 +14,24 @@ This project perfectly demonstrates a high-performance distributed systems archi
 
 - [.NET 8.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 - Visual Studio 2022 or VS Code
+- PostgreSQL running locally on `localhost:5432` (or Docker Compose with the included `postgres_db` service)
 
 ## How to Run Locally
 
 To demonstrate the distributed nature of the system, you can run multiple instances of the worker and one instance of the coordinator.
+
+### Start PostgreSQL first
+
+If you have Docker installed, run:
+```powershell
+docker compose up -d postgres_db
+```
+
+If you prefer a native installation, make sure PostgreSQL is running and accepting connections on `localhost:5432` with credentials:
+- `Username`: `postgres`
+- `Password`: `postgres`
+- `Database`: `RiskEngine`
+
 
 1. **Start Worker 1:**
    Open a terminal and run:
@@ -56,14 +70,36 @@ To demonstrate the distributed nature of the system, you can run multiple instan
 
 ## Deployment Considerations
 
-> **Note on Netlify Deployment**
-> 
-> Netlify is an excellent platform for deploying frontend applications (like a React or Vue dashboard that consumes our GraphQL API). However, Netlify natively hosts static sites and serverless functions (like AWS Lambda typically running Node.js or Go). 
-> 
-> Because this backend is built with **C# .NET 8.0** and relies on **gRPC Server Streams** (which require persistent HTTP/2 connections), it cannot be hosted directly on Netlify. 
-> 
-> **Recommended Backend Hosting Alternatives:**
-> - **Azure Container Apps** or **Google Cloud Run**: Ideal for containerized ASP.NET Core gRPC microservices.
-> - **Fly.io** or **Render**: Excellent for running Docker containers that require persistent networking.
-> 
-> You can deploy a frontend dashboard on Netlify that makes traditional HTTP GraphQL calls to the Coordinator hosted on one of the above platforms!
+### Expose the Coordinator using Cloudflare Tunnel
+
+For a stable public endpoint without opening router ports, Cloudflare Tunnel is a great fit. It lets you expose the local Coordinator service securely through Cloudflare's network, while the Worker nodes remain local.
+
+1. Run the Coordinator locally:
+   ```bash
+   dotnet run --project RiskEngine.Coordinator/RiskEngine.Coordinator.csproj --urls "http://localhost:5100"
+   ```
+2. Expose it through Cloudflare Tunnel:
+   ```bash
+   cloudflared tunnel --url http://localhost:5100
+   ```
+3. Use the generated public URL to reach the GraphQL API, for example:
+   ```text
+   https://<random-subdomain>.trycloudflare.com/graphql
+   ```
+
+If you want a permanent public hostname, create and run a named tunnel with a Cloudflare account and a local config file.
+
+**Why this works well for this project**
+- The Coordinator stays local and continues to call local Worker instances on `localhost`.
+- No router port forwarding is required.
+- Cloudflare provides TLS termination, DDoS protection, and a public endpoint for dashboards or remote clients.
+
+### Recommended backend hosting alternatives
+
+This backend is built with **C# .NET 8.0** and relies on long-lived HTTP connections, so it is not a direct fit for Netlify’s static hosting model.
+
+Recommended hosting options for the backend:
+- **Azure Container Apps** or **Google Cloud Run**: Ideal for containerized ASP.NET Core microservices.
+- **Fly.io** or **Render**: Good for Docker containers with persistent networking.
+
+You can still deploy the frontend on Netlify while using Cloudflare Tunnel or another backend host for the Coordinator.

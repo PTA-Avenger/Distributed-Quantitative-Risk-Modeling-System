@@ -47,6 +47,16 @@ builder.Services.AddAuthorization();
 builder.Services.AddSingleton<RiskMetricsCalculator>();
 builder.Services.AddSingleton<SimulationOrchestrator>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 builder.Services
     .AddGraphQLServer()
     .AddAuthorization()
@@ -54,6 +64,7 @@ builder.Services
     .AddMutationType<AuthMutation>();
 
 var app = builder.Build();
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 

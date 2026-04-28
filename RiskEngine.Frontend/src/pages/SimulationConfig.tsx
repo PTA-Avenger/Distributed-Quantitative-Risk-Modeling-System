@@ -13,6 +13,12 @@ const EXECUTE_SIMULATION = gql`
         bucket
         freq
       }
+      expectedPnl
+      maxLoss
+      maxGain
+      standardDeviation
+      skewness
+      kurtosis
     }
   }
 `;
@@ -80,11 +86,18 @@ export default function SimulationConfig() {
         setResults(
           response.data.executeSimulation.var95, 
           response.data.executeSimulation.cvar95, 
-          response.data.executeSimulation.pnlDistribution
+          response.data.executeSimulation.pnlDistribution,
+          response.data.executeSimulation.expectedPnl,
+          response.data.executeSimulation.maxLoss,
+          response.data.executeSimulation.maxGain,
+          response.data.executeSimulation.standardDeviation,
+          response.data.executeSimulation.skewness,
+          response.data.executeSimulation.kurtosis
         );
         setIsSimulating(false);
         navigate(`/results/LATEST`);
       } else {
+        console.error("GraphQL Error:", response.error || response.errors);
         setIsSimulating(false);
       }
     } catch (e) {

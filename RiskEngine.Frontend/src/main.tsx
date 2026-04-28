@@ -5,7 +5,7 @@ import App from './App.tsx'
 import './index.css'
 
 const httpLink = new HttpLink({
-  uri: 'https://risk-engine-coordinator.onrender.com/graphql',
+  uri: import.meta.env.VITE_GRAPHQL_URL || 'http://localhost:5100/graphql',
 });
 
 const client = new ApolloClient({

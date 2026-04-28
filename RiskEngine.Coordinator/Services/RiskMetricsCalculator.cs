@@ -74,11 +74,38 @@ public class RiskMetricsCalculator
             Freq = count 
         });
 
+        // Calculate statistical moments
+        double mean = pnlArray.Average();
+        double maxLoss = pnlArray[0];
+        double maxGain = pnlArray[pnlArray.Length - 1];
+        
+        double sumSq = 0;
+        double sumCube = 0;
+        double sumQuad = 0;
+        
+        foreach (var pnl in pnlArray)
+        {
+            double diff = pnl - mean;
+            sumSq += Math.Pow(diff, 2);
+            sumCube += Math.Pow(diff, 3);
+            sumQuad += Math.Pow(diff, 4);
+        }
+
+        double stdDev = Math.Sqrt(sumSq / pnlArray.Length);
+        double skewness = (pnlArray.Length > 0 && stdDev > 0) ? (sumCube / pnlArray.Length) / Math.Pow(stdDev, 3) : 0;
+        double kurtosis = (pnlArray.Length > 0 && stdDev > 0) ? (sumQuad / pnlArray.Length) / Math.Pow(stdDev, 4) : 0;
+
         return new RiskMetrics
         {
             ValueAtRisk = valueAtRisk,
             ExpectedShortfall = expectedShortfall,
-            PnlDistribution = buckets
+            PnlDistribution = buckets,
+            ExpectedPnl = mean,
+            MaxLoss = maxLoss,
+            MaxGain = maxGain,
+            StandardDeviation = stdDev,
+            Skewness = skewness,
+            Kurtosis = kurtosis
         };
     }
 }
@@ -94,4 +121,10 @@ public class RiskMetrics
     public double ValueAtRisk { get; set; }
     public double ExpectedShortfall { get; set; }
     public List<DistributionBucket> PnlDistribution { get; set; } = new();
+    public double ExpectedPnl { get; set; }
+    public double MaxLoss { get; set; }
+    public double MaxGain { get; set; }
+    public double StandardDeviation { get; set; }
+    public double Skewness { get; set; }
+    public double Kurtosis { get; set; }
 }

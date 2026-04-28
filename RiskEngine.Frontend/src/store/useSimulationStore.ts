@@ -35,7 +35,23 @@ interface SimulationState {
   resultsVaR: number;
   resultsCVaR: number;
   resultsDistribution: { bucket: string, freq: number }[];
-  setResults: (var95: number, cvar95: number, distribution: any[]) => void;
+  resultsExpectedPnl: number;
+  resultsMaxLoss: number;
+  resultsMaxGain: number;
+  resultsStdDev: number;
+  resultsSkewness: number;
+  resultsKurtosis: number;
+  setResults: (
+    var95: number, 
+    cvar95: number, 
+    distribution: any[], 
+    expectedPnl: number, 
+    maxLoss: number, 
+    maxGain: number, 
+    stdDev: number, 
+    skewness: number, 
+    kurtosis: number
+  ) => void;
 }
 
 export const useSimulationStore = create<SimulationState>((set) => ({
@@ -114,5 +130,21 @@ export const useSimulationStore = create<SimulationState>((set) => ({
   resultsVaR: 0,
   resultsCVaR: 0,
   resultsDistribution: [],
-  setResults: (var95, cvar95, distribution) => set({ resultsVaR: var95, resultsCVaR: cvar95, resultsDistribution: distribution }),
+  resultsExpectedPnl: 0,
+  resultsMaxLoss: 0,
+  resultsMaxGain: 0,
+  resultsStdDev: 0,
+  resultsSkewness: 0,
+  resultsKurtosis: 0,
+  setResults: (var95, cvar95, distribution, expectedPnl, maxLoss, maxGain, stdDev, skewness, kurtosis) => set({ 
+    resultsVaR: var95, 
+    resultsCVaR: cvar95, 
+    resultsDistribution: distribution,
+    resultsExpectedPnl: expectedPnl,
+    resultsMaxLoss: maxLoss,
+    resultsMaxGain: maxGain,
+    resultsStdDev: stdDev,
+    resultsSkewness: skewness,
+    resultsKurtosis: kurtosis
+  }),
 }));

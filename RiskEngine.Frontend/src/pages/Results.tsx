@@ -6,7 +6,11 @@ import { useSimulationStore } from '../store/useSimulationStore';
 export default function Results() {
   const { id } = useParams();
 
-  const { resultsVaR, resultsCVaR, resultsDistribution } = useSimulationStore();
+  const { 
+    resultsVaR, resultsCVaR, resultsDistribution,
+    resultsExpectedPnl, resultsMaxLoss, resultsMaxGain,
+    resultsStdDev, resultsSkewness, resultsKurtosis
+  } = useSimulationStore();
 
   // Draw real returned distribution or fallback
   const data = resultsDistribution.length > 0 ? resultsDistribution : Array.from({ length: 50 }).map((_, i) => ({
@@ -38,27 +42,39 @@ export default function Results() {
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--bg-border)', paddingBottom: '8px' }}>
                 <span className="text-section-header">EXPECTED P&L</span>
-                <span className="font-mono-data" style={{ color: 'var(--accent-safe)' }}>+$24,100</span>
+                <span className="font-mono-data" style={{ color: resultsExpectedPnl >= 0 ? 'var(--accent-safe)' : 'var(--accent-danger)' }}>
+                  {resultsExpectedPnl >= 0 ? '+' : '-'}${Math.abs(resultsExpectedPnl).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--bg-border)', paddingBottom: '8px' }}>
                 <span className="text-section-header">MAX LOSS</span>
-                <span className="font-mono-data" style={{ color: 'var(--accent-danger)' }}>-$410,200</span>
+                <span className="font-mono-data" style={{ color: 'var(--accent-danger)' }}>
+                  {resultsMaxLoss < 0 ? '-' : ''}${Math.abs(resultsMaxLoss).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--bg-border)', paddingBottom: '8px' }}>
                 <span className="text-section-header">MAX GAIN</span>
-                <span className="font-mono-data" style={{ color: 'var(--accent-safe)' }}>+$389,800</span>
+                <span className="font-mono-data" style={{ color: 'var(--accent-safe)' }}>
+                  {resultsMaxGain >= 0 ? '+' : ''}${Math.abs(resultsMaxGain).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--bg-border)', paddingBottom: '8px' }}>
                 <span className="text-section-header">STD DEVIATION</span>
-                <span className="font-mono-data">$87,340</span>
+                <span className="font-mono-data">
+                  ${Math.abs(resultsStdDev).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--bg-border)', paddingBottom: '8px' }}>
                 <span className="text-section-header">SKEWNESS</span>
-                <span className="font-mono-data">-0.34</span>
+                <span className="font-mono-data">
+                  {resultsSkewness.toFixed(2)}
+                </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span className="text-section-header">KURTOSIS</span>
-                <span className="font-mono-data">4.12</span>
+                <span className="font-mono-data">
+                  {resultsKurtosis.toFixed(2)}
+                </span>
               </div>
            </div>
         </div>

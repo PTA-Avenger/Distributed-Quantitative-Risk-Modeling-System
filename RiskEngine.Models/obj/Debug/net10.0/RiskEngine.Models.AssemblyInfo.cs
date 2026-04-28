@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RiskEngine.Models")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5b838bc859551a948e47f3f93e4f589b5949ebb8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+28b7be9166db82e751a3ca82c24f0a458d451d70")]
 [assembly: System.Reflection.AssemblyProductAttribute("RiskEngine.Models")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RiskEngine.Models")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

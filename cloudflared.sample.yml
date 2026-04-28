@@ -1,0 +1,14 @@
+# Sample Cloudflare Tunnel configuration for exposing the local Coordinator service.
+# Replace <TUNNEL_ID> and <HOSTNAME> with values from your Cloudflare account.
+# Save this file as cloudflared.yml or copy the values into your ~/.cloudflared/config.yml.
+
+# The tunnel ID is created by `cloudflared tunnel create risk-engine`
+tunnel: 590eefb0-b3b6-443a-8927-b5482d846a54
+
+# Path to the credentials file generated during tunnel creation.
+credentials-file: C:\Users\Thato\.cloudflared\590eefb0-b3b6-443a-8927-b5482d846a54.json
+
+ingress:
+  - hostname: <risk-engine.com>
+    service: http://localhost:5100
+  - service: http_status:404

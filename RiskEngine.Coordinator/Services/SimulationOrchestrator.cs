@@ -17,7 +17,7 @@ public class SimulationOrchestrator
     public async Task<RiskMetrics> RunDistributedSimulationAsync(SimulationRequest baseRequest, double confidenceLevel)
     {
         // Get worker URLs from configuration (e.g., appsettings.json)
-        var workerUrls = _configuration.GetSection("WorkerUrls").Get<string[]>() ?? new[] { "https://localhost:7001" };
+        var workerUrls = _configuration.GetSection("WorkerUrls").Get<string[]>() ?? new[] { "http://localhost:5001" };
 
         int totalPaths = baseRequest.NumberOfPaths;
         int pathsPerWorker = totalPaths / workerUrls.Length;
