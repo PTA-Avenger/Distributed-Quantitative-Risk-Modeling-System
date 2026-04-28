@@ -63,8 +63,10 @@ export default function CrashCourse() {
             </p>
             <ul className="text-body" style={{ marginLeft: '24px', marginTop: '12px', lineHeight: '1.8' }}>
               <li><strong>The Coordinator</strong> receives your simulation parameters (from the React UI via GraphQL), slices the workload into batches, and orchestrates the worker nodes.</li>
-              <li><strong>The Workers</strong> (listen on gRPC) take the correlation matrix (Cholesky decomposed), generate the randomized price paths, compute the P&L array, and stream results back.</li>
-              <li><strong>The UI</strong> aggregates these results live via WebSockets to paint the Bell Curve distribution dynamically.</li>
+              <li><strong>Cholesky Factorization:</strong> The .NET Coordinator runs an O(N³) decomposition algorithm on your provided Correlation Matrix to compute the Lower Triangular Factor. This allows the backend to securely correlate purely random variables across complex multi-asset portfolios.</li>
+              <li><strong>The Workers</strong> (listening on massive gRPC sockets) take this matrix, generate the randomized price paths via Geometric Brownian Motion (GBM), and stream results back.</li>
+              <li><strong>The Storage Layer:</strong> The Coordinator securely persists all historical records using PostgreSQL & EF Core for rapid retrieval across user sessions.</li>
+              <li><strong>The UI</strong> caches the compressed JSON histogram array to paint the precise Bell Curve distribution securely inside your browser.</li>
             </ul>
           </div>
         </div>

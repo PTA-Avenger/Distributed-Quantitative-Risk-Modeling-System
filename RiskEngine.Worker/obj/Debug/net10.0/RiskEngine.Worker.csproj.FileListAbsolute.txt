@@ -1,10 +1,3 @@
-C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\RiskEngine.Worker.csproj.AssemblyReference.cache
-C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\rpswa.dswa.cache.json
-C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\RiskEngine.Worker.GeneratedMSBuildEditorConfig.editorconfig
-C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\RiskEngine.Worker.AssemblyInfoInputs.cache
-C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\RiskEngine.Worker.AssemblyInfo.cs
-C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\RiskEngine.Worker.csproj.CoreCompileInputs.cache
-C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\RiskEngine.Worker.MvcApplicationPartsAssemblyInfo.cache
 C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\bin\Debug\net10.0\appsettings.Development.json
 C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\bin\Debug\net10.0\appsettings.json
 C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\bin\Debug\net10.0\RiskEngine.Worker.staticwebassets.endpoints.json
@@ -25,6 +18,14 @@ C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\bin\Debug\net
 C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\bin\Debug\net10.0\RiskEngine.Protos.dll
 C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\bin\Debug\net10.0\RiskEngine.Protos.pdb
 C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\bin\Debug\net10.0\RiskEngine.Models.pdb
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\RiskEngine.Worker.csproj.AssemblyReference.cache
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\rpswa.dswa.cache.json
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\RiskEngine.Worker.GeneratedMSBuildEditorConfig.editorconfig
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\RiskEngine.Worker.AssemblyInfoInputs.cache
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\RiskEngine.Worker.AssemblyInfo.cs
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\RiskEngine.Worker.csproj.CoreCompileInputs.cache
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\RiskEngine.Worker.MvcApplicationPartsAssemblyInfo.cache
+C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\RiskEngine.Worker.sourcelink.json
 C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\rjimswa.dswa.cache.json
 C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
 C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
@@ -40,4 +41,3 @@ C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net
 C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\RiskEngine.Worker.pdb
 C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\RiskEngine.Worker.genruntimeconfig.cache
 C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\ref\RiskEngine.Worker.dll
-C:\Distributed-Quantitative-Risk-Modeling-System\RiskEngine.Worker\obj\Debug\net10.0\RiskEngine.Worker.sourcelink.json

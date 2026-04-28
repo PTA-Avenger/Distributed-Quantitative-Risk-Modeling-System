@@ -75,4 +75,13 @@ public class SimulationWorkerService : RiskSimulationService.RiskSimulationServi
         _logger.LogInformation("Worker completed {Paths} paths", request.NumberOfPaths);
         return Task.FromResult(response);
     }
+
+    public override Task<PingResponse> Ping(PingRequest request, ServerCallContext context)
+    {
+        return Task.FromResult(new PingResponse 
+        {
+            Status = "Idle",
+            Utilization = 0
+        });
+    }
 }

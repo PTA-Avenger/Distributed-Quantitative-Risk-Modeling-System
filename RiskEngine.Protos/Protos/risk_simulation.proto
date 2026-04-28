@@ -8,6 +8,15 @@ package riskengine;
 service RiskSimulationService {
   // Executes a batch of Monte Carlo simulation paths and returns the portfolio P&L array
   rpc ExecuteSimulation (SimulationRequest) returns (SimulationResponse);
+  
+  // Health check
+  rpc Ping (PingRequest) returns (PingResponse);
+}
+
+message PingRequest {}
+message PingResponse {
+    string status = 1; // "Idle", "Busy"
+    double utilization = 2;
 }
 
 // The request message containing all parameters needed to simulate paths for the portfolio.

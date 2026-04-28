@@ -81,6 +81,14 @@ public class Query
             Console.WriteLine(ex.ToString());
             throw new GraphQLException(new Error(ex.Message));
         }
+    }
+
+    public async Task<MarketDataPayload> FetchMarketData(
+        [Service] MarketDataService marketDataService,
+        List<string> tickers)
+    {
+        return await marketDataService.FetchMarketDataAsync(tickers);
+    }
 }
 
 public class SimulationRequestInput
@@ -112,5 +120,4 @@ public class SimulationResultPayload
     public double StandardDeviation { get; set; }
     public double Skewness { get; set; }
     public double Kurtosis { get; set; }
-}
 }

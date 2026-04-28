@@ -19,6 +19,7 @@ interface SimulationState {
   correlationMatrix: number[][]; // Hardcoded covariance/correlation scope
   
   setAssets: (assets: Asset[]) => void;
+  setAssetsAndMatrix: (assets: Asset[], matrix: number[][]) => void;
   addAsset: () => void;
   removeAsset: (id: string) => void;
   setAssetWeight: (id: string, weight: number) => void;
@@ -82,6 +83,11 @@ export const useSimulationStore = create<SimulationState>((set) => ({
       Array.from({ length: n }, (_, j) => (i === j ? 1.0 : 0.0))
     );
     return { assets: newAssets, correlationMatrix: newMatrix };
+  }),
+
+  setAssetsAndMatrix: (newAssets, newMatrix) => set({
+    assets: newAssets,
+    correlationMatrix: newMatrix
   }),
 
   addAsset: () => set((state) => {

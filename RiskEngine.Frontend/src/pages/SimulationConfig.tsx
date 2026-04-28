@@ -23,16 +23,56 @@ const EXECUTE_SIMULATION = gql`
   }
 `;
 
+const FETCH_MARKET_DATA = gql`
+  query FetchMarketData($tickers: [String!]!) {
+    fetchMarketData(tickers: $tickers) {
+      assets {
+        id
+        name
+        weight
+        drift
+        volatility
+        initialPrice
+      }
+      correlationMatrix
+    }
+  }
+`;
+
 export default function SimulationConfig() {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { 
     numberOfPaths, timeHorizonYears, timeSteps, initialPortfolioValue, 
     assets, correlationMatrix, setSimulationParam, setAssetWeight,
-    setAssets, addAsset, removeAsset, setIsSimulating, isSimulating, setResults
+    setAssets, setAssetsAndMatrix, addAsset, removeAsset, updateAsset, setIsSimulating, isSimulating, setResults
   } = useSimulationStore();
   
   const [executeSim] = useLazyQuery(EXECUTE_SIMULATION);
+  const [fetchMarketData, { loading: fetchingMarketData }] = useLazyQuery(FETCH_MARKET_DATA);
+
+  const handleFetchMarketData = async () => {
+    try {
+      const tickers = assets.map(a => a.name).filter(n => n && n !== 'UNK');
+      if (tickers.length < 2) {
+        alert("Please enter at least 2 valid ticker symbols (e.g., AAPL, MSFT) in the Asset column.");
+        return;
+      }
+      const response = await fetchMarketData({ variables: { tickers } });
+      if (response.data?.fetchMarketData) {
+        setAssetsAndMatrix(
+          response.data.fetchMarketData.assets, 
+          response.data.fetchMarketData.correlationMatrix
+        );
+      } else {
+        console.error("Market Data Error:", response.error || response.errors);
+        alert("Failed to fetch market data. See console for details.");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Error fetching market data.");
+    }
+  };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -181,6 +221,14 @@ export default function SimulationConfig() {
                 <button className="btn-primary" style={{ padding: '6px 12px', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px' }} onClick={() => addAsset()}>
                   <Plus size={14} /> Row
                 </button>
+                <button 
+                  className="btn-primary" 
+                  style={{ padding: '6px 12px', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px', backgroundColor: 'var(--accent-primary)', color: 'var(--bg-base)' }} 
+                  onClick={handleFetchMarketData}
+                  disabled={fetchingMarketData}
+                >
+                  {fetchingMarketData ? 'Fetching...' : 'Fetch Live Data'}
+                </button>
                 <input type="file" accept=".csv" style={{ display: 'none' }} ref={fileInputRef} onChange={handleFileUpload} />
                 <button className="btn-primary" style={{ padding: '6px 12px', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '4px', backgroundColor: 'var(--bg-elevated)', color: 'var(--text-primary)', border: '1px solid var(--bg-border)' }} onClick={() => fileInputRef.current?.click()}>
                   <Upload size={14} /> Upload CSV
@@ -206,7 +254,14 @@ export default function SimulationConfig() {
               <tbody>
                 {assets.map((asset) => (
                   <tr key={asset.id}>
-                    <td>{asset.name}</td>
+                    <td>
+                      <input 
+                        type="text" 
+                        value={asset.name} 
+                        onChange={(e) => updateAsset(asset.id, { name: e.target.value })}
+                        style={{ width: '80px', padding: '4px' }}
+                      />
+                    </td>
                     <td>
                       <input 
                         type="number" 
@@ -216,9 +271,32 @@ export default function SimulationConfig() {
                         style={{ width: '60px', padding: '4px' }}
                       />
                     </td>
-                    <td>{asset.drift.toFixed(2)}</td>
-                    <td>{asset.volatility.toFixed(2)}</td>
-                    <td>{asset.initialPrice}</td>
+                    <td>
+                      <input 
+                        type="number" 
+                        value={asset.drift} 
+                        onChange={(e) => updateAsset(asset.id, { drift: parseFloat(e.target.value) || 0 })}
+                        step={0.01}
+                        style={{ width: '60px', padding: '4px' }}
+                      />
+                    </td>
+                    <td>
+                      <input 
+                        type="number" 
+                        value={asset.volatility} 
+                        onChange={(e) => updateAsset(asset.id, { volatility: parseFloat(e.target.value) || 0 })}
+                        step={0.01}
+                        style={{ width: '60px', padding: '4px' }}
+                      />
+                    </td>
+                    <td>
+                      <input 
+                        type="number" 
+                        value={asset.initialPrice} 
+                        onChange={(e) => updateAsset(asset.id, { initialPrice: parseFloat(e.target.value) || 0 })}
+                        style={{ width: '70px', padding: '4px' }}
+                      />
+                    </td>
                     <td>
                       <button onClick={() => removeAsset(asset.id)} style={{ background: 'transparent', border: 'none', color: 'var(--text-dim)', cursor: 'pointer' }}>
                         <Trash2 size={14} />

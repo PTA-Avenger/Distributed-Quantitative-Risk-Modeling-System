@@ -46,6 +46,7 @@ builder.Services.AddAuthorization();
 // Worker URLs configured in appsettings.json or use default for local testing
 builder.Services.AddSingleton<RiskMetricsCalculator>();
 builder.Services.AddSingleton<SimulationOrchestrator>();
+builder.Services.AddHttpClient<MarketDataService>();
 
 builder.Services.AddCors(options =>
 {
@@ -57,13 +58,19 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddHostedService<WorkerMonitorService>();
+
 builder.Services
     .AddGraphQLServer()
     .AddAuthorization()
     .AddQueryType<Query>()
-    .AddMutationType<AuthMutation>();
+    .AddMutationType<AuthMutation>()
+    .AddSubscriptionType<Subscription>()
+    .AddInMemorySubscriptions();
 
 var app = builder.Build();
+
+app.UseWebSockets();
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();

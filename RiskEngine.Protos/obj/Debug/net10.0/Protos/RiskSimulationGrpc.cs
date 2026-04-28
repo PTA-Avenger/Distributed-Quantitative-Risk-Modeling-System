@@ -52,6 +52,10 @@ namespace RiskEngine.Protos {
     static readonly grpc::Marshaller<global::RiskEngine.Protos.SimulationRequest> __Marshaller_riskengine_SimulationRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::RiskEngine.Protos.SimulationRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::RiskEngine.Protos.SimulationResponse> __Marshaller_riskengine_SimulationResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::RiskEngine.Protos.SimulationResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::RiskEngine.Protos.PingRequest> __Marshaller_riskengine_PingRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::RiskEngine.Protos.PingRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::RiskEngine.Protos.PingResponse> __Marshaller_riskengine_PingResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::RiskEngine.Protos.PingResponse.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::RiskEngine.Protos.SimulationRequest, global::RiskEngine.Protos.SimulationResponse> __Method_ExecuteSimulation = new grpc::Method<global::RiskEngine.Protos.SimulationRequest, global::RiskEngine.Protos.SimulationResponse>(
@@ -60,6 +64,14 @@ namespace RiskEngine.Protos {
         "ExecuteSimulation",
         __Marshaller_riskengine_SimulationRequest,
         __Marshaller_riskengine_SimulationResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::RiskEngine.Protos.PingRequest, global::RiskEngine.Protos.PingResponse> __Method_Ping = new grpc::Method<global::RiskEngine.Protos.PingRequest, global::RiskEngine.Protos.PingResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "Ping",
+        __Marshaller_riskengine_PingRequest,
+        __Marshaller_riskengine_PingResponse);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -79,6 +91,18 @@ namespace RiskEngine.Protos {
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::RiskEngine.Protos.SimulationResponse> ExecuteSimulation(global::RiskEngine.Protos.SimulationRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      /// Health check
+      /// </summary>
+      /// <param name="request">The request received from the client.</param>
+      /// <param name="context">The context of the server-side call handler being invoked.</param>
+      /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::RiskEngine.Protos.PingResponse> Ping(global::RiskEngine.Protos.PingRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -160,6 +184,54 @@ namespace RiskEngine.Protos {
       {
         return CallInvoker.AsyncUnaryCall(__Method_ExecuteSimulation, null, options, request);
       }
+      /// <summary>
+      /// Health check
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::RiskEngine.Protos.PingResponse Ping(global::RiskEngine.Protos.PingRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return Ping(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Health check
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::RiskEngine.Protos.PingResponse Ping(global::RiskEngine.Protos.PingRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_Ping, null, options, request);
+      }
+      /// <summary>
+      /// Health check
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::RiskEngine.Protos.PingResponse> PingAsync(global::RiskEngine.Protos.PingRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return PingAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Health check
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::RiskEngine.Protos.PingResponse> PingAsync(global::RiskEngine.Protos.PingRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_Ping, null, options, request);
+      }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       protected override RiskSimulationServiceClient NewInstance(ClientBaseConfiguration configuration)
@@ -174,7 +246,8 @@ namespace RiskEngine.Protos {
     public static grpc::ServerServiceDefinition BindService(RiskSimulationServiceBase serviceImpl)
     {
       return grpc::ServerServiceDefinition.CreateBuilder()
-          .AddMethod(__Method_ExecuteSimulation, serviceImpl.ExecuteSimulation).Build();
+          .AddMethod(__Method_ExecuteSimulation, serviceImpl.ExecuteSimulation)
+          .AddMethod(__Method_Ping, serviceImpl.Ping).Build();
     }
 
     /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the service binding logic.
@@ -185,6 +258,7 @@ namespace RiskEngine.Protos {
     public static void BindService(grpc::ServiceBinderBase serviceBinder, RiskSimulationServiceBase serviceImpl)
     {
       serviceBinder.AddMethod(__Method_ExecuteSimulation, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::RiskEngine.Protos.SimulationRequest, global::RiskEngine.Protos.SimulationResponse>(serviceImpl.ExecuteSimulation));
+      serviceBinder.AddMethod(__Method_Ping, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::RiskEngine.Protos.PingRequest, global::RiskEngine.Protos.PingResponse>(serviceImpl.Ping));
     }
 
   }
